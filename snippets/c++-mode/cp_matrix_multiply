@@ -1,0 +1,18 @@
+#key: matrix_mult
+#name: matrix multiplication
+# --
+vvl matrix_multiply(vvl a, vvl b) {
+  l n = a.size();
+  l k = b.size();
+  l m = b[0].size();
+  vvl c(n);
+  for (l i = 0; i < n; i++) c[i].resize(m);
+  for (l i = 0; i < n; i++) {
+    for (l j = 0; j < m; j++) {
+      for (l q = 0; q < k; q++) {
+        c[i][j] = (c[i][j] + a[i][q] * b[q][j]);
+      }
+    }
+  }
+  return c;
+}

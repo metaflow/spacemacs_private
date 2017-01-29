@@ -1,0 +1,38 @@
+#key: 3d
+#name: 3d point
+# --
+struct point {
+  double x, y, z;
+  point() {}
+  point(double x, double y, double z) : x(x), y(y), z(z) {}
+  // scalar multiplication
+  double operator * (const point & o) {
+    return x * o.x + y * o.y + z * o.z;
+  }
+  // vector multiplication
+  point operator ^ (const point & o) {
+    return point(y * o.z - z * o.y,
+                -x * o.z + z * o.x,
+                 y * o.x - x * o.y);
+  }
+  point operator - (const point& o) {
+    return point(x - o.x, y - o.y, z - o.z);
+  }
+  point operator + (const point& o) {
+    return point(x + o.x, y + o.y, z + o.z);
+  }
+  // distance between points
+  double operator >> (const point& o) {
+    point d = (*this - o);
+    return sqrt(d * d);
+  }
+};
+
+point polar_to_point(double r, double la, double lo) {
+  return point(r * cos(la) * cos(lo), r * cos(la) * sin(lo), r * sin(la));
+}
+
+ostream& operator << (ostream& s, const point& p) {
+  s << "(" << p.x << ", " << p.y << ", " << p.z << ")";
+  return s;
+}

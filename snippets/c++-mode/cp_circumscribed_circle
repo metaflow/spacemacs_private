@@ -1,0 +1,21 @@
+#name: circumscribed circle position
+# --
+tuple<point, bool> circumscribed_circle(point a, point b, point c) {
+  point ac = c - a;
+  point ab = b - a;
+  point bc = c - b;
+  if ((ab * ac < 0) || (ab * bc > 0) || (ac * bc < 0)) {
+    return make_tuple(point(), false);
+  }
+  if (abs(ab ^ ac) < 1e-8) { // line
+    return make_tuple(point(), false);
+  }
+  point x(ac.y, -ac.x);
+  point y(ab.y, -ab.x);
+  point e = a + (ac * 0.5);
+  point d = a + (ab * 0.5);
+  point z = d - e;
+  double w = - (x ^ z) / (x ^ y);
+  point o = d + (y * w);
+  return make_tuple(o, true);
+}

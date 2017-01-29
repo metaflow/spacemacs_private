@@ -1,0 +1,27 @@
+#key: uds
+#name: union-disjoint set
+# --
+struct disjoint_set { // set of [0..n-1]
+  vl parent;
+  l components_count_;
+
+  disjoint_set(size_t n) {
+    components_count_ = n;
+    parent.resize(n);
+    for (size_t i = 0; i < n; i++) parent[i] = i;
+  }
+  l get_parent(l i) {
+    if (parent[i] != i) parent[i] = get_parent(parent[i]);
+    return parent[i];
+  }
+  bool connected(l i, l j) { return get_parent(i) == get_parent(j); }
+   void connect(l i, l j) {
+    i = get_parent(i);
+    j = get_parent(j);
+    if (i != j) {
+      parent[i] = j;
+      components_count_--;
+    }
+  }
+  l components_count() { return components_count_; }
+};

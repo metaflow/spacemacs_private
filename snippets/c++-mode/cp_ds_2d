@@ -1,0 +1,42 @@
+#key: 2d
+#name: 2d operations
+# --
+struct point {
+  ${1:double} x, y;
+  point() {}
+  point($1 x, $1 y) : x(x), y(y) {}
+  // scalar multiplication
+  $1 operator * (const point & o) {
+    return x * o.x + y * o.y;
+  }
+  point operator * (const $1 m) {
+    return point(x * m, y * m);
+  }
+  // vector multiplication
+  $1 operator ^ (const point & o) {
+    return x * o.y - y * o.x;
+  }
+  point operator - (const point& o) {
+    return point(x - o.x, y - o.y);
+  }
+  point operator + (const point& o) {
+    return point(x + o.x, y + o.y);
+  }
+  // squared distance
+  double operator >> (const point& o) {
+    point d = (*this - o);
+    return d * d;
+  }
+  double distance(const point& o) {
+    return sqrt(*this >> o);
+  }
+  const bool operator < (const point& o) const {
+    if (o.x != x) return x < o.x;
+    return y < o.y;
+  }
+};
+
+ostream& operator << (ostream& s, const point& p) {
+  s << "(" << p.x << ", " << p.y << ")";
+  return s;
+}

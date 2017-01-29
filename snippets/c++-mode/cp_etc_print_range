@@ -1,0 +1,13 @@
+#key: print_range
+#name: print range separated by space
+# --
+template <typename Iterator>
+ostream& print_range(ostream& s, const Iterator a, const Iterator b) {
+  bool first = true;
+  for (auto i = a; i != b; i++) {
+    if (!first) s << " ";
+    first = false;
+    s << *i;
+  }
+  return s;
+}

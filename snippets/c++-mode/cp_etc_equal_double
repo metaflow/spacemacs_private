@@ -1,0 +1,10 @@
+#key: eqdouble
+#name: equality of real numbers
+# --
+bool equal_double(double x, double y, double epsilon) {
+  if (abs(x - y) < epsilon) return true;
+  // Is x or y too close to zero?
+  if (abs(x) < epsilon || abs(y) < epsilon) return false;
+  // Check relative precision.
+  return (abs((x - y) / x) < epsilon) && (abs((x - y) / y) < epsilon);
+}

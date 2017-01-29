@@ -1,0 +1,16 @@
+#key: factorize
+#name: factorize small integer to primes
+# --
+vl factorize_to_primes(l n, vl& primes) {
+  vl factors;
+  auto p = primes.begin();
+  while (p != primes.end() && (*p) * (*p) <= n) {
+    while (n % *p == 0) {
+      factors.emplace_back(*p);
+      n /= *p;
+    }
+    p++;
+  }
+  if (n != 1) factors.emplace_back(n);
+  return factors;
+}

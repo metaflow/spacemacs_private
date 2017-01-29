@@ -1,0 +1,29 @@
+#key: graph
+#name: directed graph with pointers
+# --
+struct node;
+struct edge;
+using pnode = shared_ptr<node>;
+using pedge = shared_ptr<edge>;
+using graph = vector<pnode>;
+
+struct node {
+  bool visited;
+  vector<pedge> adjusted;
+  pedge back;
+};
+
+struct edge {
+  pnode from, to;
+  int flow;
+  pedge opposite;
+};
+
+void connect(pnode &a, pnode &b, int w) {
+  pedge ea = make_shared<edge>();
+  pedge eb = make_shared<edge>();
+  ea->from = a; ea->to = b; ea->flow = w; ea->opposite = eb;
+  eb->from = b; eb->to = a; eb->flow = 0; eb->opposite = ea;
+  a->adjusted.emplace_back(ea);
+  b->adjusted.emplace_back(eb);
+}

@@ -1,0 +1,14 @@
+#key: matrix_power
+#name: matrix power (log n)
+# --
+vvl matrix_power(vvl m, l power) {
+  l n = m.size();
+  vvl o(n);
+  for (l i = 0; i < n; i++) { o[i].resize(n); o[i][i] = 1; }
+  while (power) {
+    if (power % 2) o = matrix_multiply(o, m);
+    m = matrix_multiply(m, m);
+    power /= 2;
+  }
+  return o;
+}

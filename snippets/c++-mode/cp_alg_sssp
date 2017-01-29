@@ -1,0 +1,28 @@
+#key:sssp
+#name: single source shortest paths (~Dijkstra)
+# --
+// adj[u][?] = (v, x) - edge from u to v of weight x
+vl shortest_paths(int from, vector<vector<ii>>& adj) {
+  size_t n = adj.size();
+  vl distance(n, INF);
+  queue<size_t> q;
+  vb in_queue(n, false);
+  distance[from] = 0;
+  q.emplace(from);
+  while (!q.empty()) {
+    size_t u = q.front(); q.pop(); in_queue[u] = false;
+    for (auto e : adj[u]) {
+      int v = e.first;
+      int d = e.second;
+      l t = distance[u] + d;
+      if (t < distance[v]) {
+        distance[v] = t;
+        if (!in_queue[v]) {
+          q.emplace(v);
+          in_queue[v] = true;
+        }
+      }
+    }
+  }
+  return distance;
+}

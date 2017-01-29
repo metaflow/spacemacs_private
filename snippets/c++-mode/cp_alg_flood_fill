@@ -1,0 +1,24 @@
+#key: floodfill
+#name: floodfill 2d matrix
+# --
+void flood_fill(vvl& M, l r, l c, l from_color, l to_color) {
+  const l dr[] = {1, -1, 0, 0};
+  const l dc[] = {0, 0, 1, -1};
+  queue<ll> q;
+  if (M.empty()) return;
+  l max_x = M.size();
+  l max_y = M[0].size();
+  M[r][c] = to_color;
+  q.emplace(r, c);
+  while (!q.empty()) {
+    auto p = q.front(); q.pop();
+    for (l i = 0; i < 4; i++) {
+      l x = p.first + dr[i];
+      l y = p.second + dc[i];
+      if (x < 0 || x >= max_x || y < 0 || y >= max_y) continue;
+      if (M[x][y] != from_color) continue;
+      M[x][y] = to_color;
+      q.emplace(x, y);
+    }
+  }
+}

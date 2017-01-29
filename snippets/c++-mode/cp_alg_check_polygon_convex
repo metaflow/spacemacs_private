@@ -1,0 +1,13 @@
+#key: convextest
+#name: test if 2d polygon is convex
+# --
+// assumes no 3 points collinear
+bool convex(vector<point> &p) {
+  l s = (p[1] - p[0]) ^ (p[2] - p[0]);
+  for (l i = 1; i < p.size(); i++) {
+    int j = (i + 1) % p.size();
+    int k = (j + 1) % p.size();
+    if (s * ((p[j] - p[i]) ^ (p[k] - p[i])) < 0) return false;
+  }
+  return true;
+}

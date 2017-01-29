@@ -1,0 +1,13 @@
+#key: multmod
+#name: multiplication modulo safe for near max
+# --
+// (a * b) % mod, safe for l near max
+l mult_mod(l a, l b, l mod) {
+  l x = 0;
+  while (b) {
+    if (b % 2) x = (x + a) % mod;
+    a = (a * 2) % mod;
+    b /= 2;
+  }
+  return x;
+}

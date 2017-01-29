@@ -1,0 +1,9 @@
+#key: gcd
+#name: GCD and LCM
+# --
+l gcd(l a, l b) {
+  while (b) { l t = b; b = a % b; a = t; }
+  return a;
+}
+
+l lcm(l a, l b) { return a * b / gcd(a, b); }

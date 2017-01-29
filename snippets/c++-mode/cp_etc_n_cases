@@ -1,0 +1,9 @@
+#key: tcc
+#name: problem with several subproblems
+# --
+int tcc; cin >> tcc;
+for (int tc = 1; tc <= tcc; tc++) {
+  $0
+  l answer = 0;
+  cout << "Case #" << tc << ": " << answer << endl;
+}

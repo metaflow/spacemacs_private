@@ -1,0 +1,13 @@
+#key: bsl
+#name: binary search lower
+# --
+// finds lowest x: f(x) = true, x within [a, b) f(b) = true
+${1:l} binary_search_lower($1 a, $1 b, function<bool($1)> f) {
+  $1 step = b - a;
+  while (step > 0) {
+    step /= 2;
+    $1 m = a + step;
+    if (!f(m)) a = m + 1;
+  }
+  return a;
+}

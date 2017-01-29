@@ -1,0 +1,8 @@
+#key: sign
+#name: sign of int
+# --
+l sign(l n) {
+  if (n < 0) return -1;
+  if (n == 0) return 0;
+  return 1;
+}
