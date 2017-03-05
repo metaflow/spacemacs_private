@@ -1,25 +1,24 @@
 #key: kmp
 #name: KMP substring search in O(n) (Knuth Morris Pratt)
 # --
-vi kmp_build_back(string pattern) {
-  vi b(pattern.size());
-  size_t i = 0; int j = -1; b[0] = -1;
-  while (i < pattern.size()) {
-    while (j > -1 && pattern[j] != pattern[i]) j = b[j];
-    i++;
-    j++;
+vl kmp_build_back(const string& p) {
+  vl b(p.size());
+  l j = -1;
+  for (size_t i = 0; i < p.size(); i++) {
     b[i] = j;
+    while ((j > -1) and (p[j] != p[i])) j = b[j];
+    j++;
   }
   return b;
 }
 
-vi kmp_search(string pattern, string s, vi b) {
-  int j = 0;
-  vi matches;
+vl kmp_search(const string& s, const string& p, const vl& b) {
+  vl matches;
+  l j = 0;
   for (size_t i = 0; i < s.size(); i++) {
-    while (j > -1 && pattern[j] != s[i]) j = b[j];
+    while (j > -1 && p[j] != s[i]) j = b[j];
     j++;
-    if (j == int(pattern.size())) {
+    if (j == l(p.size())) {
       matches.emplace_back(i - j + 1);
       j = b[j];
     }

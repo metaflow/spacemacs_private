@@ -1,0 +1,30 @@
+#key: rmq
+#name: range minimum query
+# --
+vvl rmq_preprocess(vl& A) {
+  l n = A.size();
+  vvl R(1, vl(n));
+  for (l i = 0; i < n; i++) R[0][i] = i;
+  for (l k = 1; 2 * k <= n; k = k << 1) {
+    vl V;
+    for (l i = 0; i + 2 * k <= n; i++) {
+      if (A[R.back()[i]] < A[R.back()[i + k]]) {
+        V.emplace_back(R.back()[i]);
+      } else {
+        V.emplace_back(R.back()[i + k]);
+      }
+    }
+    R.emplace_back(V);
+  }
+  return R;
+}
+
+// range minimum query [from, to)
+l rmq(l from, l to, vl& A, vvl& P) {
+  l q = P.size() - 1;
+  l k = (l)1 << q;
+  while (k > (to - from)) { k = k >> 1; q--; }
+  l i = P[q][from];
+  l j = P[q][to - k];
+  return (A[i] < A[j]) ? i : j;
+}

@@ -1,0 +1,6 @@
+#key: bits
+#name: misc. bits functions
+# --
+
+l popcnt(l value) { return __builtin_popcount(value); }
+bool bit_set(l mask, l i) { return mask & (e0 << i); }
