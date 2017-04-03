@@ -1,0 +1,5 @@
+#key: file_io
+#name: map cin cout to files
+# --
+ifstream fin("input.txt"); cin.rdbuf(fin.rdbuf());
+ofstream fout("output.txt"); cout.rdbuf(fout.rdbuf());

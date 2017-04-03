@@ -3,19 +3,20 @@
 # --
 default_random_engine source(chrono::system_clock::now().time_since_epoch().count());
 
+// [a, b)
 l random_in_range(l a, l b) {
-  return uniform_int_distribution<l>(a, b)(source);
+  return uniform_int_distribution<l>(a, b - 1)(source);
 }
 
 bool random_bool() {
-  return random_in_range(0, 1) == 1;
+  return random_in_range(0, 2) == 1;
 }
 
 string random_string(int length) {
   string s = "";
   string an = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
   for (int i = 0; i < length; i++) {
-    s += an[random_in_range(0, an.size() - 1)];
+    s += an[random_in_range(0, an.size())];
   }
   return s;
 }

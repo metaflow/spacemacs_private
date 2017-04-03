@@ -4,7 +4,7 @@
 struct point {
   ${1:double} x, y;
   point() {}
-  point($1 x, $1 y) : x(x), y(y) {}
+  point($1 _x, $1 _y) : x(_x), y(_y) {}
   // scalar multiplication
   $1 operator * (const point & o) {
     return x * o.x + y * o.y;
@@ -30,12 +30,33 @@ struct point {
   double distance(const point& o) {
     return sqrt(*this >> o);
   }
-  const bool operator < (const point& o) const {
+  bool operator < (const point& o) const {
     if (o.x != x) return x < o.x;
+    if (not equal_double(o.x, x)) return x < o.x;
     return y < o.y;
   }
 };
 
+// 0 - no intersection, 1 - point o1, 2 - segment [o1, o2]
+l segment_intersection(point a, point b, point c, point d, point& o1, point &o2) {
+  point x = c - a, y = d - a, z = b - a;
+  double t = (x ^ z) + (z ^ y);
+  if (abs(t) < EPS) {
+    if (abs(x ^ y) < EPS) {
+      vector<point> v = {a, b, c, d};
+      sort(ALL(v));
+      o1 = v[1];
+      o2 = v[2];
+      return 2;
+    } else {
+      return 0;
+    }
+  }
+  t = (x ^ y) / t;
+  if (t < 0 or t > 1) return 0;
+  o1 = o2 = a + z * t;
+  return 1;
+}
 ostream& operator << (ostream& s, const point& p) {
   s << "(" << p.x << ", " << p.y << ")";
   return s;
