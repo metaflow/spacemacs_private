@@ -1,0 +1,36 @@
+#key: affine
+#name: 2d affine transformations
+# --
+class Affine {
+  vvd M = {{1,0,0}, {0,1,0}, {0, 0, 1}};
+  vvd _m(vvd a, vvd b) {
+    l n = a.size();
+    l k = b.size();
+    l m = b[0].size();
+    vvd c(n);
+    for (l i = 0; i < n; i++) c[i].resize(m);
+    for (l i = 0; i < n; i++) {
+      for (l j = 0; j < m; j++) {
+        for (l q = 0; q < k; q++) {
+          c[i][j] = (c[i][j] + a[i][q] * b[q][j]);
+        }
+      }
+    }
+    return c;
+  }
+public:
+  void translate(point d) { M = _m({{1, 0, d.x}, {0, 1, d.y}, {0, 0, 1}}, M); }
+  // clockwise, rads
+  void rotate(double a) {
+    M = _m({{cos(a),sin(a),0}, {-sin(a),cos(a),0}, {0, 0, 1}}, M);
+  }
+  void scale(point d) { M = _m({{d.x, 0, 0}, {0, d.y, 0}, {0, 0, 1}}, M); }
+  void shearX(double a) { M = _m({{1, tan(a), 0}, {0, 1, 0}, {0, 0, 1}}, M); }
+  void shearY(double a) { M = _m({{1, 0, 0}, {tan(a), 1, 0}, {0, 0, 1}}, M); }
+  point apply(point p) {
+    auto r = _m(M, {{p.x}, {p.y}, {1}});
+    return point(r[0][0], r[1][0]);
+  }
+
+  void reset() { M = {{1,0,0}, {0,1,0}, {0, 0, 1}}; }
+};

@@ -1,0 +1,11 @@
+#key: polygon_area
+#name: area of polygon
+# --
+double area(vector<point> polygon) {
+  double r = 0;
+  F(i, 0, polygon.size()) {
+    l j = (i + 1) % polygon.size();
+    r += polygon[i] ^ polygon[j];
+  }
+  return abs(r) * 0.5;
+}
