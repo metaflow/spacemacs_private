@@ -1,15 +1,14 @@
 #key: sieve
 #name: sieve primes
 # --
-const l MAX_PRIME = 1000000;
-vl sieve_primes() {
-  bitset<MAX_PRIME + 1> b;
-  vl primes;
-  primes.emplace_back(2);
-  for (l i = 3; i <= MAX_PRIME; i += 2) {
-    if (b[i]) continue;
+const l MAX_PRIME = 50000;
+// returns vector of v[i] = `biggest prime divisor of i`
+vl sieve_primes(vl& primes) {
+  vl next_div(MAX_PRIME, 1);
+  for (l i = 2; i < MAX_PRIME; i++) {
+    if (next_div[i] != 1) continue;
     primes.emplace_back(i);
-    for (l j = i * i; j <= MAX_PRIME; j += i) b.set(j);
+    for (l j = i; j < MAX_PRIME; j += i) next_div[j] = i;
   }
-  return primes;
+  return next_div;
 }

@@ -26,7 +26,7 @@ void connect(pnode a, pnode b) {
   //b->backward.emplace_back(e);
 }
 
-void scc_dfs(pnode u, int& age, stack<pnode>& s) {
+void scc_dfs(pnode u, l& age, stack<pnode>& s) {
   age++;
   u->age = u->reachable = age;
   u->visited = true;
@@ -48,7 +48,7 @@ void scc_dfs(pnode u, int& age, stack<pnode>& s) {
 }
 
 void find_scc(graph& g) {
-  int age = 0;
+  l age = 0;
   for (auto u : g) {
     if (u->visited) continue;
     stack<pnode> s;

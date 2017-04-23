@@ -1,5 +1,7 @@
 #key: file_io
 #name: map cin cout to files
 # --
-ifstream fin("input.txt"); cin.rdbuf(fin.rdbuf());
-ofstream fout("output.txt"); cout.rdbuf(fout.rdbuf());
+#if defined ONLINE_JUDGE
+ifstream fin("A.in"); cin.rdbuf(fin.rdbuf());
+ofstream fout("A.in.o"); cout.rdbuf(fout.rdbuf());
+#endif

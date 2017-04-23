@@ -1,6 +1,10 @@
-#key: inverse_mod
-#name: inverse modulo
+#key: integers_misc
+#name: integers: ceil, inverse modulo
 # --
+l divup(l a, l b) { // ceil div
+  return (a + b - 1) / b;
+}
+
 // return b: a * b = 1 (mod n)
 l inverse_mod(l a, l n) {
   l x, y;

@@ -1,0 +1,33 @@
+#key: ternary_search_int
+#name: ternary search min value int interval
+# --
+// returns (x, f(x)): f(x) = min(f(y)): y in [from, to]
+ll ternary_search_min(l from, l to, function<l(l)> f) {
+  l L = from, R = to;
+  l rl = f(L), rr = f(R);
+  while (1) {
+    if (R - L < 2) {
+      if (rl < rr) return make_pair(L, rl);
+      return make_pair(R, rr);
+    }
+    if (R - L == 2) {
+      l t = f(L + 1);
+      if (t < rl) {
+        if (t < rr) return make_pair(L + 1, t);
+        return make_pair(R, rr);
+      } else {
+        if (rl < rr) return make_pair(L, rl);
+        return make_pair(R, rr);
+      }
+    }
+    l m1 = L + (R - L) / 3;
+    l m2 = L + 2 * (R - L) / 3;
+    vl v = {rl, f(m1), f(m2), rr};
+    l x = 0;
+    F(i, 1, 4) if (v[i] < v[x]) x = i;
+    if (x < 2) { R = m2; rr = v[2]; }
+    else { L = m1; rl = v[1]; }
+  }
+  assert(false);
+  return make_pair(0, 0);
+}
