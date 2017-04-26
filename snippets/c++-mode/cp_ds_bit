@@ -1,16 +1,15 @@
-#key: fenwick
-#name: Fenwick tree for range sum queries
+#key: BIT
+#name: binary indexed (Fenwick) tree for range sum queries
 # --
-// RSQ for range [1, n]
-struct fenwik_tree {
+struct BIT {
   vl tree;
   l max_p;
-  fenwik_tree(size_t n) {
+  BIT(size_t n) {
     max_p = n;
     tree.resize(n + 1);
   };
   // sum of [1, p], O(log(max))
-  l read(l p) {
+  l get(l p) {
     l sum = 0;
     while (p) {
       sum += tree[p];
