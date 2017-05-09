@@ -2,7 +2,7 @@
 #name: sieve primes
 # --
 const l MAX_PRIME = 50000;
-// returns vector of v[i] = `biggest prime divisor of i`
+// returns vector of v[i] = biggest prime divisor of i
 vl sieve_primes(vl& primes) {
   vl next_div(MAX_PRIME, 1);
   for (l i = 2; i < MAX_PRIME; i++) {

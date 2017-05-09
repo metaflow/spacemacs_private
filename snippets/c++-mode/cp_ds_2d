@@ -44,7 +44,7 @@ l segment_intersection(point a, point b, point c, point d, point& o1, point &o2)
   if (abs(t) < EPS) {
     if (abs(x ^ y) < EPS) {
       vector<point> v = {a, b, c, d};
-      sort(ALL(v));
+      sort(all(v));
       o1 = v[1];
       o2 = v[2];
       return 2;

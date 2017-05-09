@@ -1,11 +1,15 @@
 #key: rnd
-#name: random functions
+#name: random values generators
 # --
 default_random_engine source(chrono::system_clock::now().time_since_epoch().count());
 
 // [a, b)
 l random_in_range(l a, l b) {
   return uniform_int_distribution<l>(a, b - 1)(source);
+}
+
+double random_double() {
+  return uniform_real_distribution<double>(0, 1)(source);
 }
 
 bool random_bool() {

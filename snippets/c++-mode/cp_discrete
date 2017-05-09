@@ -7,6 +7,10 @@ l sign(l n) {
   return 1;
 }
 
+l cong(l x, l mod) {
+  return (x % mod + mod) % mod;
+}
+
 // (a * b) % mod, safe for l near max
 l mult_mod(l a, l b, l mod) {
   l x = 0;
@@ -48,7 +52,7 @@ l inverse_mod(l a, l n) {
   l x, y;
   l d = extended_euclid(a, n, x, y);
   if (d != 1) return 0;
-  return (x + (abs(x) / n + 1) * n) % n;
+  return cong(x, n);
 }
 
 l nCr(l n, l k, l mod) {
@@ -59,3 +63,5 @@ l nCr(l n, l k, l mod) {
   b = inverse_mod(b, mod);
   return mult_mod(a, b, mod);
 }
+
+

@@ -1,0 +1,14 @@
+#key: e9primes
+#name: big primes for hashes
+# --
+vl get_hash_primes(l k) {
+  const l e9_primes[] = {
+    7, 9, 21, 33, 87, 93, 97, 103, 123, 181, 207, 223, 241, 271, 289, 297, 321,
+    349, 363, 403, 409, 411, 427, 433, 439, 447, 453, 459, 483, 513, 531, 579, 607,
+    613, 637, 663, 711, 753, 787, 801, 829, 861, 871, 891, 901, 919, 931, 933, 993 };
+  vl t; for (auto i : e9_primes) t.emplace_back(e9 + i);
+  shuffle(all(t), source);
+  if (t.size() > k) t.resize(k);
+  return t;
+}
+

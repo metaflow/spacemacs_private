@@ -1,0 +1,77 @@
+#key: segtree
+#name: segment tree (ragne queries, lazy propagated)
+# --
+class SegmentTree {
+  l n;
+  vl v, low, high, delta;
+
+  void init(l i, l a, l b) {
+    low[i] = a;
+    high[i] = b;
+    if (a == b) return;
+    l m = a + (b - a) / 2;
+    init(2 * i, a, m);
+    init(2 * i + 1, m + 1, b);
+  }
+
+  void propagate(l p) {
+    delta[2 * p] += delta[p];
+    delta[2 * p + 1] += delta[p];
+    delta[p] = 0;
+  }
+
+  l merge(l a, l b) {
+    return min(a, b);
+  }
+
+  l get(l p, l a, l b) {
+    if (b < low[p] or high[p] < a) return numeric_limits<l>::max();
+    if (a <= low[p] and high[p] <= b) {
+      return v[p] + delta[p];
+    }
+    propagate(p);
+    auto r = merge(get(p * 2, a, b),
+                   get(p * 2 + 1, a, b));
+    update(p);
+    return r;
+  }
+
+  void update(l p) {
+    v[p] = merge(get(p * 2, low[p], high[p]),
+                 get(p * 2 + 1, low[p], high[p]));
+  }
+
+  void add(l p, l a, l b, l value) {
+    if (b < low[p] or high[p] < a) return;
+
+    if (a <= low[p] and high[p] <= b) {
+      delta[p] += value;
+      return;
+    }
+
+    propagate(p);
+    add(2 * p, a, b, value);
+    add(2 * p + 1, a, b, value);
+    update(p);
+  }
+
+public:
+  SegmentTree(l size) {
+    n = 1;
+    while (n < size) n = n << 1;
+    n = n << 1;
+    v.resize(n);
+    low.resize(n);
+    high.resize(n);
+    delta.resize(n);
+    init(1, 0, size - 1);
+  }
+
+  void add(l a, l b, l value) {
+    add(1, a, b, value);
+  }
+
+  l get(l a, l b) {
+    return get(1, a, b);
+  }
+};
