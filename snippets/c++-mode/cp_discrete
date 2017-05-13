@@ -7,6 +7,7 @@ l sign(l n) {
   return 1;
 }
 
+// conruent modulo, works for negative
 l cong(l x, l mod) {
   return (x % mod + mod) % mod;
 }
@@ -55,6 +56,7 @@ l inverse_mod(l a, l n) {
   return cong(x, n);
 }
 
+// single combintions k from n
 l nCr(l n, l k, l mod) {
   l a = 1;
   for (l i = n; i > n - k; i--) a = mult_mod(a, i, mod);
@@ -64,4 +66,15 @@ l nCr(l n, l k, l mod) {
   return mult_mod(a, b, mod);
 }
 
+// precompute all combinations up to (n n)
+vvl combinations(l n, l mod) {
+  vvl c(n + 1, vl(n + 1));
+  F(i, 0, n) {
+    c[i][0] = 1;
+    F(j, 1, i + 1) {
+      c[i][j] = (c[i - 1][j] + c[i - 1][j - 1]) % mod;
+    }
+  }
+  return c;
+}
 
