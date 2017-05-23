@@ -297,6 +297,29 @@ executes.
  This function is mostly useful for variables that need to be set
 before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
+  (defun open-problem (a b c)
+    (select-frame-set-input-focus (selected-frame))
+    (delete-other-windows)
+    (let ((w-solution (first (window-list))))
+      (find-file a)
+      (let ((w-in (split-window-right)))
+        (select-window w-in)
+        (find-file b)
+        (let ((w-compilation (split-window-below))
+              (w-test (split-window-below))
+              (w-out (split-window-right)))
+          (select-window w-out)
+          (find-file c)
+          (select-window w-test)
+          (switch-to-buffer "*test result*")
+          (select-window w-compilation)
+          (switch-to-buffer "*compilation*")
+          (select-window w-solution)
+          (search-forward "// solution")
+          )
+        )
+      )
+    )
   )
 
 (defun dotspacemacs/user-config ()
@@ -307,7 +330,7 @@ This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
   ;; (unless (server-running-p)
-    ;; (server-start)) 
+    ;; (server-start))
   ;; (add-to-list 'default-frame-alist '(fullscreen . fullboth))
   (add-to-list 'default-frame-alist '(fullscreen . maximized))
   (setq explicit-shell-file-name "c:\\Program Files\\Git\\bin\\bash.exe")
@@ -322,10 +345,11 @@ you should place your code here."
                     (file-name-nondirectory (file-name-sans-extension buffer-file-name))
                     "'\"")
           )
-    ;; (print x)
     (with-output-to-temp-buffer "*test result*"
-      (shell-command x "*test result*")
-      (print (current-time-string)))
+      (princ (current-time-string))
+      (princ "\n")
+      (princ (shell-command-to-string x))
+      )
     )
   (defun copy-file-name-to-clipboard ()
     "Copy the current buffer file name to the clipboard."
@@ -336,6 +360,7 @@ you should place your code here."
       (when filename
         (kill-new filename)
         (message "Copied buffer file name '%s' to the clipboard." filename))))
+
   ;; key bindings
   (spacemacs/set-leader-keys-for-major-mode 'c++-mode
     "t"  'test-problem)
