@@ -31,6 +31,7 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
+     javascript
      html
      ruby
      python
@@ -315,7 +316,7 @@ before packages are loaded. If you are unsure, you should try in setting them in
           (select-window w-compilation)
           (switch-to-buffer "*compilation*")
           (select-window w-solution)
-          (search-forward "// solution")
+          (search-forward "void solve")
           )
         )
       )
@@ -337,20 +338,18 @@ you should place your code here."
   (setq explicit-bash.exe-args '("--noediting" "--login" "-i"))
   (setq ispell-program-name "C:\\Program Files (x86)\\Aspell\\bin\\aspell.exe")
   (defun test-problem()
-    ;; (recompile)
     (interactive)
     (defvar x)
-    (setq x (concat "\"C:\\Program Files\\Git\\bin\\bash.exe\" -c \"~/etc/contests/test.sh '"
-                    (directory-file-name (file-name-directory buffer-file-name)) "' '"
+    (setq x (concat "\"C:\\Program Files\\Git\\bin\\bash.exe\" -c \""
+                    "~/etc/contests/test.sh '"
+                    (directory-file-name (file-name-directory buffer-file-name))
+                    "' '"
                     (file-name-nondirectory (file-name-sans-extension buffer-file-name))
-                    "'\"")
-          )
+                    "'\""))
     (with-output-to-temp-buffer "*test result*"
       (princ (current-time-string))
       (princ "\n")
-      (princ (shell-command-to-string x))
-      )
-    )
+      (princ (shell-command-to-string x))))
   (defun copy-file-name-to-clipboard ()
     "Copy the current buffer file name to the clipboard."
     (interactive)
@@ -374,10 +373,11 @@ you should place your code here."
                        (concat "g++ -std=c++14 -o "
                                (file-name-sans-extension file)
                                "\
- -O2 -Wall -Wshadow -Wno-unused-const-variable -lpthread -pthread\
+ -O2 -Wall -Wextra -Wshadow -Wno-unused-const-variable -Wno-sign-compare -pthread\
  -DLOCAL\
  -I\"C:\\users\\mgoncharov\\etc\\contests\\headers\" -g "
-                               file))))))
+                               file
+                               " -lpthread -lpsapi"))))))
   (add-hook 'c++-mode-hook #'(lambda () (modify-syntax-entry ?_ "w")))
   (add-hook 'python-mode-hook #'(lambda () (modify-syntax-entry ?_ "w")))
   (push "\\*compilation\\*" spacemacs-useful-buffers-regexp)

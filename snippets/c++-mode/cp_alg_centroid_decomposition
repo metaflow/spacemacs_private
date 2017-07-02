@@ -1,0 +1,46 @@
+#key: centroid
+#name: centroid graph decomposition
+# --
+// add bool blocked and subtreeSize to node
+void dfsSubtreeSize(pnode u) {u->subtreeSize = 1;
+  for (auto e : u->adjusted) {
+    auto v = e->to;
+    if (v->blocked or u->parent == v) continue;
+    v->parent = u;
+    dfsSubtreeSize(v);
+    u->subtreeSize += v->subtreeSize;
+  }
+}
+
+l solveFor(pnode u, l size) {
+  return 0;
+}
+
+l decompose(pnode u) {
+  u->parent = nullptr;
+  dfsSubtreeSize(u);
+  l total = u->subtreeSize;
+  queue<pnode> q;
+  q.emplace(u);
+  l best = total;
+  pnode centroid = u;
+  while (!q.empty()) {
+    auto v = q.front(); q.pop();
+    l t = total - v->subtreeSize;
+    for (auto e : v->adjusted) {
+      if (e->to->blocked or e->to == v->parent) continue;
+      t = max(t, e->to->subtreeSize);
+      q.emplace(e->to);
+    }
+    if (t < best) {
+      centroid = v;
+      best = t;
+    }
+  }
+  l answer = solveFor(centroid, best);
+  centroid->blocked = true;
+  for (auto e : centroid->adjusted) {
+    if (not e->to->blocked) answer += decompose(e->to);
+  }
+  return answer;
+}

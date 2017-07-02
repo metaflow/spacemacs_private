@@ -1,7 +1,7 @@
 #key: factorize
 #name: factorize small integer to primes
 # --
-// not sorted
+// in asc order
 vl factorize_to_primes(l n, vl& primes, vl& next_div) {
   auto p = primes.begin();
   vl result;

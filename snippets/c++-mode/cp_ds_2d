@@ -23,12 +23,19 @@ struct point {
     return point(x + o.x, y + o.y);
   }
   // squared distance
-  double operator >> (const point& o) {
+  $1 operator >> (const point& o) {
     point d = (*this - o);
     return d * d;
   }
   double distance(const point& o) {
     return sqrt(*this >> o);
+  }
+  bool equal_double(double x, double y) {
+    if (abs(x - y) < EPS) return true;
+    // Is x or y too close to zero?
+    if (abs(x) < EPS || abs(y) < EPS) return false;
+    // Check relative precision.
+    return (abs((x - y) / x) < EPS) && (abs((x - y) / y) < EPS);
   }
   bool operator < (const point& o) const {
     if (o.x != x) return x < o.x;

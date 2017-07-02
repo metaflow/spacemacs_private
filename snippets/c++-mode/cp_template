@@ -24,9 +24,9 @@ const char lf = '\n';
 #define B(a,b,c) for (l a = l(b); a > l(c); a--)
 
 #if defined(LOCAL)
-const bool enable_log = true;
+bool local = true;
 #else
-const bool enable_log = false;
+bool local = false;
 #endif
 struct VoidStream { void operator&(std::ostream&) { } };
-#define LOG !(enable_log) ? (void) 0 : VoidStream() & cerr
+#define LOG !(local) ? (void) 0 : VoidStream() & cerr

@@ -8,22 +8,23 @@ using pedge = shared_ptr<edge>;
 using graph = vector<pnode>;
 
 struct node {
+  l id, value;
   bool visited;
   vector<pedge> adjusted;
-  pedge back;
+  // vector<pnode> adjusted;
+  // l subtreeSize = 1; bool blocked;
+  // l level;
+  // vector<pnode> up;
+  pnode parent;
 };
 
 struct edge {
   pnode from, to;
-  int flow;
-  pedge opposite;
+  l value;
 };
 
-void connect(pnode &a, pnode &b, int w) {
+void connect(pnode &a, pnode &b, l value) {
   pedge ea = make_shared<edge>();
-  pedge eb = make_shared<edge>();
-  ea->from = a; ea->to = b; ea->flow = w; ea->opposite = eb;
-  eb->from = b; eb->to = a; eb->flow = 0; eb->opposite = ea;
+  ea->from = a; ea->to = b; ea->value = value;
   a->adjusted.emplace_back(ea);
-  b->adjusted.emplace_back(eb);
 }

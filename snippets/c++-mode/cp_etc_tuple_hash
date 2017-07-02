@@ -1,0 +1,30 @@
+#key: tuplehash
+#name: tuple hash for unordered map / set
+# --
+// tuple hash
+namespace std { namespace {
+template <class T>
+inline void hash_combine(std::size_t& seed, T const& v) {
+  seed ^= std::hash<T>()(v) + 0x9e3779b9 + (seed<<6) + (seed>>2);
+}
+template <class T, size_t Index = std::tuple_size<T>::value - 1>
+struct HashValueImpl {
+  static void apply(size_t& seed, T const& tuple) {
+    HashValueImpl<T, Index-1>::apply(seed, tuple);
+    hash_combine(seed, std::get<Index>(tuple));
+  }
+};
+template <class T>
+struct HashValueImpl<T,0> {
+  static void apply(size_t& seed, T const& tuple) {
+    hash_combine(seed, std::get<0>(tuple));
+  }
+}; } // namespace
+template <typename ... TT>
+struct hash<std::tuple<TT...>> {
+  size_t operator()(std::tuple<TT...> const& tt) const {
+    size_t seed = 0;
+    HashValueImpl<std::tuple<TT...> >::apply(seed, tt);
+    return seed;
+  }
+};}

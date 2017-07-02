@@ -1,0 +1,13 @@
+#key: random test
+#name: template for random test
+# --
+#if defined(RANDOM_TEST)
+
+void solve_brute(istream& cin, ostream& cout) {
+}
+
+void generate(l size, ostream& cout) {
+  cout << size << lf;
+}
+
+#endif

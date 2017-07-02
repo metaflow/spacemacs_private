@@ -1,0 +1,26 @@
+#key: toposort
+#name: set topological order in DAG
+# --
+// topo_order is not unique, if edge a -> b, order of a is less
+void topological_sort(graph& g) {
+  l n = g.size();
+  vl out(n);
+  queue<pnode> q;
+  F(i, 0, n) {
+    out[i] = g[i]->adjusted.size();
+    if (out[i] == 0) {
+      q.emplace(g[i]);
+      g[i]->topo_order = n;
+    }
+  }
+  while (not q.empty()) {
+    auto u = q.front(); q.pop();
+    for (auto v : u->backward) {
+      out[v->id]--;
+      if (out[v->id] == 0) {
+        v->topo_order = u->topo_order - 1;
+        q.emplace(v);
+      }
+    }
+  }
+}

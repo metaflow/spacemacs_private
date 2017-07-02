@@ -7,11 +7,11 @@ l binary_search_lower(l a, l b, function<bool(l)> f) {
   while (count > 0) {
     l step = count / 2;
     l m = a + step;
-    if (not f(m)) {
+    if (f(m)) {
+      count = step;
+    } else {
       a = m + 1;
       count -= step + 1;
-    } else {
-      count = step;
     }
   }
   return a;
