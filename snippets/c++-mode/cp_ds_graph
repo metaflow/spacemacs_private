@@ -1,0 +1,47 @@
+#key: graph
+#name: vector based graph, LCA
+# --
+struct Graph {
+  vvl adj;
+  vvl up;
+  vl depth;
+
+  Graph(l n) {
+    adj.resize(n);
+    depth.resize(n);
+    l k = 0;
+    while ((1 << k) <= n) k++;
+    up.resize(k, vl(n, -1));
+  }
+
+  void build_up(l a) {
+    F(i, 1, up.size()) {
+      l t = up[i - 1][up[i - 1][a]];
+      if (t == -1) break;
+      up[i][a] = t;
+    }
+  }
+
+  l walk(l a, l d) {
+    l k = 0;
+    while (d > 0) {
+      if (d % 2) a = up[k][a];
+      d /= 2;
+      k++;
+    }
+    return a;
+  }
+
+  l lca(l a, l b) {
+    a = walk(a, depth[a] - depth[b]);
+    b = walk(b, depth[b] - depth[a]);
+    if (a == b) return a;
+    B(i, 0, up.size()) {
+      if (up[i][a] != up[i][b]) {
+        a = up[i][a];
+        b = up[i][b];
+      }
+    }
+    return up[0][a];
+  }
+};

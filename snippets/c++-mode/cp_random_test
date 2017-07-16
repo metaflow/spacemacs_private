@@ -1,13 +1,10 @@
-#key: random test
-#name: template for random test
+#key: gen
+#name: generate random input
 # --
-#if defined(RANDOM_TEST)
+int _random_test_size_from = 1;
+int _random_test_size_to = 101;  // exclusive 
+int _random_test_count = 1000;
 
-void solve_brute(istream& cin, ostream& cout) {
-}
-
-void generate(l size, ostream& cout) {
+void generate_random(l size, ostream& cout) {
   cout << size << lf;
 }
-
-#endif

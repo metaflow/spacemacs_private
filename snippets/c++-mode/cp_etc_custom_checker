@@ -1,0 +1,7 @@
+#key: checker
+#name: custom solution checker
+# --
+bool solution_checker(istream& input, istream& /* expected */,
+                      istream& actual, ostream& out) {
+  return true;
+}

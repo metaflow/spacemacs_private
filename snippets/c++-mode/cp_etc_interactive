@@ -1,0 +1,7 @@
+#key: interactive
+#name: interactive problem part
+# --
+void player_b(istream& hidden_state, ostream& log,
+              istream& cin, ostream& cout) {
+
+}
