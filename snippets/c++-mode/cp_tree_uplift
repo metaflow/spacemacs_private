@@ -1,0 +1,61 @@
+#key:tup
+#name:tree uplift LCA
+# --
+struct TreeUplift {
+  vvl up; // binary lift [i][j] jump of 2^i from j
+  vl depth; // depth[root] = 0
+
+  static TreeUplift build(Graph& g, l root) {
+    TreeUplift lift;
+    lift.depth.resize(g.v_count);
+    l k = 0;
+    while ((1 << k) <= g.v_count) k++;
+    lift.up.resize(k, vl(g.v_count, -1));
+
+    queue<l> q;
+    q.emplace(root);
+    lift.depth[root] = 0;
+    while (not q.empty()) {
+      l a = q.front(); q.pop();
+      for (auto b : g.adj[a]) {
+        if (b.to == lift.up[0][a]) continue;
+        lift.up[0][b.to] = a;
+        lift.depth[b.to] = lift.depth[a] + 1;
+        lift.build_up(b.to);
+        q.emplace(b.to);
+      }
+    }
+    return lift;
+  }
+
+  void build_up(l a) {
+    F(i, 1, up.size()) {
+      l t = up[i - 1][up[i - 1][a]];
+      if (t == -1) break;
+      up[i][a] = t;
+    }
+  }
+
+  l walk(l a, l d) {
+    l k = 0;
+    while (d > 0) {
+      if (d % 2) a = up[k][a];
+      d /= 2;
+      k++;
+    }
+    return a;
+  }
+
+  l lca(l a, l b) {
+    a = walk(a, depth[a] - depth[b]);
+    b = walk(b, depth[b] - depth[a]);
+    if (a == b) return a;
+    B(i, 0, up.size()) {
+      if (up[i][a] != up[i][b]) {
+        a = up[i][a];
+        b = up[i][b];
+      }
+    }
+    return up[0][a];
+  }
+};

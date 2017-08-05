@@ -1,10 +1,10 @@
 #key: gen
-#name: generate random input
+#name: generate random test input
 # --
-int _random_test_size_from = 1;
-int _random_test_size_to = 101;  // exclusive 
-int _random_test_count = 1000;
+// return false to stop
+bool generate_random(l tc, ostream& cout) {
+  l max_cases = 10000;
+  if (tc % (max_cases / 100) == 0) cerr << (tc * 100 / max_cases) << "%\r";
 
-void generate_random(l size, ostream& cout) {
-  cout << size << lf;
+  return tc < max_cases;
 }
