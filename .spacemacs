@@ -373,7 +373,9 @@ you should place your code here."
                        (concat "g++ -std=c++14 -o "
                                (file-name-sans-extension file)
                                "\
- -O2 -Wall -Wextra -Wshadow -Wno-unused-const-variable -Wno-sign-compare -pthread\
+ -O2 -Wall -Wextra -Wshadow\
+ -Wno-unused-const-variable -Wno-sign-compare -Wno-unused-value\
+ -pthread\
  -DLOCAL\
  -I\"C:\\users\\mgoncharov\\etc\\contests\\headers\" -g "
                                file

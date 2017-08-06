@@ -1,6 +1,7 @@
 #key: BIT
 #name: binary indexed (Fenwick) tree for range sum queries
 # --
+// [1, n]
 struct BIT {
   vl tree;
   l max_p;

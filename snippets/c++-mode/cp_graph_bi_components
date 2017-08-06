@@ -11,8 +11,8 @@ struct BiComponents {
   static BiComponents build(Graph& g) {
     BiComponents bc;
     bc.time = 0;
-    bc.age.resize(g.v_count, -1);
-    bc.lowlink.resize(g.v_count, -1);
+    bc.age.resize(g.v_count);
+    bc.lowlink.resize(g.v_count);
     bc.in_path.resize(g.v_count);
     bc.cut_vertex.resize(g.v_count);
 
@@ -27,8 +27,9 @@ struct BiComponents {
 
   // edge #id ->a
   void dfs_components(l a, l edge_id, Graph& g) {
+    time++;
     in_path[a] = true;
-    lowlink[a] = age[a] = time; time++;
+    lowlink[a] = age[a] = time; 
     l forward_count = 0;
     bool root = edge_id == g.e_count;
     for (auto e : g.adj[a]) {
@@ -37,16 +38,16 @@ struct BiComponents {
         explored_edge[e.id] = true;
         edge_stack.push(e);
       }
-      if (age[e.to] != 0) { // visited
+      if (age[e.to]) { // visited
         if (in_path[e.to]) { // back edge
           lowlink[a] = min(lowlink[a], age[e.to]);
         }
       } else { // forward edge
         dfs_components(e.to, e.id, g);
         lowlink[a] = min(lowlink[a], lowlink[e.to]);
+        bridge[e.id] = lowlink[e.to] == age[e.to];
         if (root ? (++forward_count > 1) : (lowlink[e.to] >= age[a])) {
-          // articulation point
-          cut_vertex[a] = true;
+          cut_vertex[a] = true; // articulation point
           // extract component
           vector<Edge> c;
           while (1) {
