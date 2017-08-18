@@ -1,57 +1,37 @@
 #key: scc
 #name: strongly connected components of directed graph
 # --
-struct node;
-struct edge;
-using pnode = shared_ptr<node>;
-using pedge = shared_ptr<edge>;
-using graph = vector<pnode>;
+struct SCC {
+  vl age, lowlink, component;
+  l time, count;
+  stack<l> path;
 
-struct node {
-  bool visited;
-  bool in_stack;
-  int age, reachable;
-  vector<pedge> forward;
-  //vector<pedge> backward;
-};
-
-struct edge {
-  pnode from, to;
-};
-
-void connect(pnode a, pnode b) {
-  pedge e = make_shared<edge>();
-  e->from = a; e->to = b;
-  a->forward.emplace_back(e);
-  //b->backward.emplace_back(e);
-}
-
-void scc_dfs(pnode u, l& age, stack<pnode>& s) {
-  age++;
-  u->age = u->reachable = age;
-  u->visited = true;
-  s.push(u);
-  u->in_stack = true;
-  for (auto e : u->forward) {
-    auto v = e->to;
-    if (!v->visited) scc_dfs(v, age, s);
-    if (v->in_stack) u->reachable = min(u->reachable, v->reachable);
+  SCC(Graph& g) {
+    age.resize(g.v_count);
+    lowlink.resize(g.v_count);
+    component.resize(g.v_count);
+    time = 0;
+    count = 0;
+    F(i, 0, g.v_count) if (not age[i]) dfs(g, i);
   }
-  if (u->age == u->reachable) {
-    while (true) {
-      // do something
-      auto v = s.top(); s.pop();
-      v->in_stack = false;
-      if (u == v) break;
+
+  void dfs(Graph& g, l a) {
+    time++;
+    age[a] = lowlink[a] = time;
+    path.push(a);
+    for (auto e : g.adj[a]) {
+      l b = e.to;
+      if (not age[b]) dfs(g, b);
+      lowlink[a] = min(lowlink[a], lowlink[b]);
+    }
+    if (lowlink[a] == age[a]) {
+      while (1) {
+        l t = path.top(); path.pop();
+        lowlink[t] = INF;
+        component[t] = count;
+        if (t == a) break;
+      }
+      count++;
     }
   }
-}
-
-void find_scc(graph& g) {
-  l age = 0;
-  for (auto u : g) {
-    if (u->visited) continue;
-    stack<pnode> s;
-    scc_dfs(u, age, s);
-  }  
-}
+};

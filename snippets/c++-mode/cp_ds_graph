@@ -24,4 +24,11 @@ struct Graph {
     e_count++;
     edges.emplace_back(ab);
   }
+
+  void add_directed(l a, l b) {
+    Edge ab; ab.id = e_count; ab.from = a; ab.to = b;
+    adj[a].emplace_back(ab);
+    e_count++;
+    edges.emplace_back(ab);
+  }
 };
