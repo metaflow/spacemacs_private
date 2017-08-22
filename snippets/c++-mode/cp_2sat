@@ -1,0 +1,33 @@
+#key: 2sat
+#name: 2SAT solver
+# --
+// variables [0, n)
+struct SAT2 { // requires `graph` and `scc`
+  Graph g;
+  l size;
+
+  SAT2(l n): g(n * 2), size(n) {}
+
+  void add_or(l x, l y) {
+    g.add_directed(neg(x), y);
+    g.add_directed(neg(y), x);
+  }
+
+  void add_true(l x) {
+    g.add_directed(neg(x), x);
+  }
+
+  void add_xor(l x, l y) {
+    add_or(x, y);
+    add_or(neg(x), neg(y));
+  }
+
+  l neg(l x) { return (x + size) % (2 * size); }
+
+  bool is_solvable() {
+    SCC scc(g);
+    F(i, 0, size) if (scc.component[i] == scc.component[neg(i)])
+      return false;
+    return true;
+  }
+};
