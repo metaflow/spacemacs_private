@@ -2,24 +2,37 @@
 #name: 2SAT solver
 # --
 // variables [0, n)
-struct SAT2 { // requires `graph` and `scc`
+struct SAT2 { // requires 'graph' and 'scc'
   Graph g;
   l size;
 
   SAT2(l n): g(n * 2), size(n) {}
 
+  // x => y
+  void add(l x, l y) { g.add_directed(x, y); }
+
   void add_or(l x, l y) {
-    g.add_directed(neg(x), y);
-    g.add_directed(neg(y), x);
+    add(neg(x), y);
+    add(neg(y), x);
   }
 
-  void add_true(l x) {
-    g.add_directed(neg(x), x);
-  }
+  void add_true(l x) { add(neg(x), x); }
+
+  void add_false(l x) { add(x, neg(x)); }
 
   void add_xor(l x, l y) {
     add_or(x, y);
     add_or(neg(x), neg(y));
+  }
+
+  void add_not_and(l x, l y) { // TODO: update snippet
+    add_or(neg(x), neg(y));
+  }
+
+  // x <=> y
+  void add_eq(l x, l y) {
+    add_or(neg(x), y);
+    add_or(x, neg(y));
   }
 
   l neg(l x) { return (x + size) % (2 * size); }
@@ -29,5 +42,30 @@ struct SAT2 { // requires `graph` and `scc`
     F(i, 0, size) if (scc.component[i] == scc.component[neg(i)])
       return false;
     return true;
+  }
+
+  // returns vector [-1, ...] if there is no solution, or [0, 1,..] assigments
+  vl solve() {
+    SCC scc(g);
+    vvl v(scc.count);
+    F(i, 0, scc.component.size()) {
+      v[scc.component[i]].emplace_back(i);
+    }
+    vl solution(size, -1);
+    F(i, 0, size) if (scc.component[i] == scc.component[neg(i)])
+      return solution;
+    F(i, 0, v.size()) {
+      bool take = true;
+      for (auto a : v[i]) {
+        l t = a; if (t >= size) t = neg(t);
+        take = take and solution[t] == -1;
+      }
+      if (not take) continue;
+      for (auto a : v[i]) {
+        l t = a; if (t >= size) t = neg(t);
+        solution[t] = (t == a ? 1 : 0);
+      }
+    }
+    return solution;
   }
 };

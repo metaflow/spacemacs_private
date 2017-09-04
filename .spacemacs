@@ -31,6 +31,7 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
+     autohotkey
      javascript
      html
      ruby
@@ -350,6 +351,12 @@ you should place your code here."
       (princ (current-time-string))
       (princ "\n")
       (princ (shell-command-to-string x))))
+  (defun problem-layout()
+    (interactive)
+    (let ((a (buffer-file-name)))
+      (let ((b (replace-regexp-in-string "\\.cpp" ".in" a))
+            (c (replace-regexp-in-string "\\.cpp" ".out" a)))
+        (open-problem a b c))))
   (defun copy-file-name-to-clipboard ()
     "Copy the current buffer file name to the clipboard."
     (interactive)
