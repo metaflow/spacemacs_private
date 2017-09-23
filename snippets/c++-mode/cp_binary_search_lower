@@ -16,3 +16,14 @@ l binary_search_lower(l a, l b, function<bool(l)> f) {
   }
   return a;
 }
+
+// finds lowest x: f(x) = true, x within [a, b)
+double binary_search_lower_double(double a, double b, function<bool(double)> f) {
+  double diff = b - a;
+  while (diff > EPS) {
+    diff /= 2;
+    double m = a + diff;
+    if (!f(m)) a = m;
+  }
+  return a;
+}

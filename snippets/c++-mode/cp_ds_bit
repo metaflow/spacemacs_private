@@ -9,14 +9,16 @@ struct BIT {
     max_p = n;
     tree.resize(n + 1);
   };
-  // sum of [1, p], O(log(max))
-  l get(l p) {
+  l get(l p) {  // sum of [1, p], O(log(max))
     l sum = 0;
     while (p) {
       sum += tree[p];
       p -= (p & -p);
     }
     return sum;
+  }
+  l get(l from, l to) {  // [from, to]
+    return get(to) - get(from - 1);
   }
   // O(log(max))
   void add(l p, l value) {

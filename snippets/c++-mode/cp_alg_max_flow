@@ -1,64 +1,58 @@
 #key: maxflow
 #name: maximum flow
 # --
-// v max flow
-struct node;
-struct edge;
-using pnode = shared_ptr<node>;
-using pedge = shared_ptr<edge>;
-using graph = vector<pnode>;
+struct MaxFlow {  // require 'graph'
+  l result_flow;
+  vl age;
+  vl back;
+  vvl capacity;
 
-struct node {
-  int age;
-  vector<pedge> adjusted;
-  pedge back;
-};
-
-struct edge {
-  pnode from, to;
-  int flow;
-  pedge opposite;
-};
-
-int adjust(pedge e, int d) {
-  if (!e) return d;
-  d = adjust(e->from->back, min(d, e->flow));
-  e->flow -= d;
-  e->opposite->flow += d;
-  return d;
-}
-
-void connect(pnode &a, pnode &b, int w) {
-  pedge ea = make_shared<edge>();
-  pedge eb = make_shared<edge>();
-  ea->from = a; ea->to = b; ea->flow = w; ea->opposite = eb;
-  eb->from = b; eb->to = a; eb->flow = 0; eb->opposite = ea;
-  a->adjusted.emplace_back(ea);
-  b->adjusted.emplace_back(eb);
-}
-
-int max_flow(vector<pnode> &g, pnode &source, pnode &sink) {
-  int result = 0;
-  while (true) {
-    for (auto u : g) u->age = 0;
-    queue<pnode> q;
-    q.push(source); source->age = 1;
-    while (!(q.empty() || sink->age != 0)) {
-      auto u = q.front(); q.pop();
-      for (auto e : u->adjusted) {
-        auto v = e->to;
-        if (v->age != 0 || e->flow == 0) continue;
-        v->back = e;
-        v->age = u->age + 1;
-        q.push(v);
+  MaxFlow(Graph& g, l source, l sink) {
+    result_flow = 0;
+    age.resize(g.v);
+    back.resize(g.v);
+    capacity.resize(g.v);
+    F(i, 0, g.v) {
+      capacity[i].resize(g.adj[i].size());
+      F(j, 0, g.adj[i].size()) capacity[i][j] = g.adj[i][j].capacity;
+    }
+    while (true) {
+      fill(all(age), 0);
+      fill(all(back), -1);
+      queue<l> q;
+      q.push(source); age[source] = 1;
+      while (not (q.empty() || age[sink])) {
+        l u = q.front(); q.pop();
+        F(j, 0, g.adj[u].size()) {
+          auto& e = g.adj[u][j];
+          l v = e.to;
+          if (age[v] || capacity[u][j] == 0) continue;
+          back[v] = e.opposite;
+          age[v] = age[u] + 1;
+          q.push(v);
+        }
+      }
+      if (age[sink] == 0) break; // unreachable
+      for (auto& e : g.adj[sink]) {
+        l u = e.to;
+        if (age[u] != age[sink] - 1 or capacity[u][e.opposite] == 0) continue;
+        vll path;
+        path.emplace_back(u, e.opposite);
+        while (back[u] != -1) {
+          auto& uv = g.adj[u][back[u]];
+          u = uv.to;
+          path.emplace_back(u, uv.opposite);
+        }
+        // adjust path
+        l d = INF;
+        for (auto p : path) d = min(d, capacity[p.first][p.second]);
+        for (auto p : path) {
+          capacity[p.first][p.second] -= d;
+          auto& t = g.adj[p.first][p.second];
+          capacity[t.to][t.opposite] += d;
+        }
+        result_flow += d;
       }
     }
-    if (sink->age == 0) break;
-    for (auto e : sink->adjusted) {
-      auto o = e->opposite;
-      if (o->from->age != sink->age - 1 || o->flow == 0) continue;
-      result += adjust(o, o->flow);
-    }
   }
-  return result;
-} // ^ max flow 
+};

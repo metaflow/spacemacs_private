@@ -1,6 +1,7 @@
 #key: segtree
 #name: segment tree (ragne queries, lazy propagated)
 # --
+// [0, size), get / add intervals are inclusive
 class SegmentTree {
   l n;
   vl v, low, high, delta;
@@ -12,6 +13,7 @@ class SegmentTree {
     l m = a + (b - a) / 2;
     init(2 * i, a, m);
     init(2 * i + 1, m + 1, b);
+    update(i);
   }
 
   void propagate(l p) {
@@ -21,13 +23,13 @@ class SegmentTree {
   }
 
   l merge(l a, l b) {
-    return min(a, b);
+    return min(a, b);  // <---
   }
 
   l get(l p, l a, l b) {
     if (b < low[p] or high[p] < a) return numeric_limits<l>::max();
     if (a <= low[p] and high[p] <= b) {
-      return v[p] + delta[p];
+      return v[p] + delta[p];  // <---
     }
     propagate(p);
     auto r = merge(get(p * 2, a, b),
@@ -45,7 +47,7 @@ class SegmentTree {
     if (b < low[p] or high[p] < a) return;
 
     if (a <= low[p] and high[p] <= b) {
-      delta[p] += value;
+      delta[p] += value;  // <---
       return;
     }
 

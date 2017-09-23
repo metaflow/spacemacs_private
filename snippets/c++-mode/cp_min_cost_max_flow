@@ -1,96 +1,90 @@
 #key: min cost max flow
 #name: find min-cost max-flow in directed graph with no negative cycles
 # --
-struct node;
-struct edge;
-using pnode = shared_ptr<node>;
-using pedge = shared_ptr<edge>;
-using graph = vector<pnode>;
+struct MinCostMaxFlow { // require 'graph'
+  vl potential;
+  vl back; // index of edge back to source
+  vvl capacity, cost; // mutable copies for every edge
+  l result_cost, result_flow;
 
-struct node {
-  bool in_queue;
-  l potential;
-  vector<pedge> adjusted;
-  pedge back;
+  void sssp(Graph& g, l source) {
+    fill(all(potential), INF);
+    fill(all(back), -1);
+    vb in_queue(g.v);
+    queue<l> q;
+    potential[source] = 0;
+    in_queue[source] = true;
+    q.emplace(source);
+    while (!q.empty()) {
+      l u = q.front(); q.pop();
+      in_queue[u] = false;
+      F(i, 0, g.adj[u].size()) {
+        auto& e = g.adj[u][i];
+        if (capacity[u][i] == 0) continue;
+        l v = e.to;
+        l t = potential[u] + cost[u][i];
+        if (t >= potential[v]) continue;
+        potential[v] = t;
+        back[v] = e.opposite;
+        if (in_queue[v]) continue;
+        in_queue[v] = true;
+        q.emplace(v);
+      }
+    }
+    // update costs
+    F(i, 0, g.v) {
+      F(j, 0, g.adj[i].size()) {
+        if (capacity[i][j] == 0) continue;
+        cost[i][j] += potential[g.adj[i][j].from] - potential[g.adj[i][j].to];
+      }
+    }
+  }
+
+  MinCostMaxFlow(Graph& g, l s, l t, l max_allowed_cost) {
+    result_cost = 0;
+    result_flow = 0;
+    cost.resize(g.v);
+    capacity.resize(g.v);
+    potential.resize(g.v);
+    back.resize(g.v);
+    F(i, 0, g.v) {
+      cost[i].resize(g.adj[i].size());
+      capacity[i].resize(g.adj[i].size());
+      F(j, 0, cost[i].size()) {
+        cost[i][j] = g.adj[i][j].cost;
+        capacity[i][j] = g.adj[i][j].capacity;
+      }
+    }
+    while (max_allowed_cost >= 0) {
+      sssp(g, s);
+      if (potential[t] == INF) break;
+      // augment
+      stack<l> path; // from s -> t, idexes of edges
+      l m = INF;
+      auto u = t;
+      while (back[u] != -1) {
+        auto& ba = g.adj[u][back[u]];
+        u = ba.to;
+        path.push(ba.opposite);
+        m = min(m, capacity[u][ba.opposite]);
+      }
+      // <- u == s
+      while (!path.empty()) {
+        auto e = path.top(); path.pop();
+        max_allowed_cost -= m * g.adj[u][e].cost;
+        if (max_allowed_cost < 0) break;
+        capacity[u][e] -= m;
+        l v = g.adj[u][e].to;
+        l vu = g.adj[u][e].opposite;
+        capacity[v][vu] += m;
+        u = v;
+      }
+      if (max_allowed_cost >= 0) result_flow += m;
+    }
+    F(i, 0, g.v) {
+      F(j, 0, g.adj[i].size()) {
+        result_cost += (g.adj[i][j].capacity - capacity[i][j]) * g.adj[i][j].cost;
+      }
+    }
+  }
 };
-
-struct edge {
-  pnode from, to;
-  l capacity, original_capacity;
-  l cost, original_cost;
-  pedge opposite;
-
-};
-
-void connect(pnode &a, pnode &b, l w, l cost) {
-  pedge ea = make_shared<edge>();
-  pedge eb = make_shared<edge>();
-  ea->from = a; ea->to = b; ea->capacity = ea->original_capacity = w;
-  ea->cost = ea->original_cost = cost; ea->opposite = eb;
-  eb->from = b; eb->to = a; eb->capacity = eb->original_capacity = 0;
-  eb->cost = eb->original_cost = 0; eb->opposite = ea;
-  a->adjusted.emplace_back(ea);
-  b->adjusted.emplace_back(eb);
-}
-
-void sssp(pnode start, graph& g) {
-  for (auto u : g) {
-    u->potential = INF;
-    u->in_queue = false;
-    u->back = NULL;
-  }
-  queue<pnode> q;
-  start->potential = 0;
-  start->in_queue = true;
-  q.emplace(start);
-  while (!q.empty()) {
-    auto u = q.front(); q.pop();
-    u->in_queue = false;
-    for (auto e : u->adjusted) {
-      if (e->capacity == 0) continue;
-      auto v = e->to;
-      l t = u->potential + e->cost;
-      if (t >= v->potential) continue;
-      v->potential = t;
-      v->back = e;
-      if (v->in_queue) continue;
-      v->in_queue = true;
-      q.emplace(v);
-    }
-  }
-  // update potentials
-  for (auto u : g) {
-    for (auto e : u->adjusted) {
-      if (e->capacity == 0) continue;
-      e->cost += e->from->potential - e->to->potential;
-    }
-  }
-}
-
-l min_cost_max_flow(graph& g, pnode s, pnode t) {
-  while (true) {
-    sssp(s, g);
-    if (t->potential == INF) break;
-    // augment
-    stack<pedge> a;
-    l m = INF;
-    auto u = t;
-    while (u->back) {
-      a.push(u->back);
-      m = min(m, u->back->capacity);
-      u = u->back->from;
-    }
-    while (!a.empty()) {
-      auto e = a.top(); a.pop();
-      e->capacity -= m;
-      e->opposite->capacity += m;
-    }
-  }
-  l cost = 0;
-  for (auto u : g) {
-    for (auto e : u->adjusted) {
-      cost += (e->original_capacity - e->capacity) * e->original_cost;
-    }
-  }
-  return cost;
-}

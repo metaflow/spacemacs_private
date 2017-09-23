@@ -1,31 +1,29 @@
-#key:tup
-#name:tree uplift LCA
+#key: lca
+#name: LCA, binary uplift
 # --
-struct TreeUplift {
+struct LCA {  // require 'graph'
   vvl up; // binary lift [i][j] jump of 2^i from j
   vl depth; // depth[root] = 0
 
-  static TreeUplift build(Graph& g, l root) {
-    TreeUplift lift;
-    lift.depth.resize(g.v_count);
+  LCA(Graph& g, l root) {
+    depth.resize(g.v);
     l k = 0;
-    while ((1 << k) <= g.v_count) k++;
-    lift.up.resize(k, vl(g.v_count, -1));
+    while ((1 << k) <= g.v) k++;
+    up.resize(k, vl(g.v, -1));
 
     queue<l> q;
     q.emplace(root);
-    lift.depth[root] = 0;
+    depth[root] = 0;
     while (not q.empty()) {
       l a = q.front(); q.pop();
       for (auto b : g.adj[a]) {
-        if (b.to == lift.up[0][a]) continue;
-        lift.up[0][b.to] = a;
-        lift.depth[b.to] = lift.depth[a] + 1;
-        lift.build_up(b.to);
+        if (b.to == up[0][a]) continue;
+        up[0][b.to] = a;
+        depth[b.to] = depth[a] + 1;
+        build_up(b.to);
         q.emplace(b.to);
       }
     }
-    return lift;
   }
 
   void build_up(l a) {
@@ -36,7 +34,7 @@ struct TreeUplift {
     }
   }
 
-  l walk(l a, l d) {
+  l walk(l a, l d) {  // walks up d levels
     l k = 0;
     while (d > 0) {
       if (d % 2) a = up[k][a];
