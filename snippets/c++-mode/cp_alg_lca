@@ -16,12 +16,12 @@ struct LCA {  // require 'graph'
     depth[root] = 0;
     while (not q.empty()) {
       l a = q.front(); q.pop();
-      for (auto b : g.adj[a]) {
-        if (b.to == up[0][a]) continue;
-        up[0][b.to] = a;
-        depth[b.to] = depth[a] + 1;
-        build_up(b.to);
-        q.emplace(b.to);
+      for (auto e : g.adj[a]) {
+        if (e.to == up[0][a]) continue;
+        up[0][e.to] = a;
+        depth[e.to] = depth[a] + 1;
+        build_up(e.to);
+        q.emplace(e.to);
       }
     }
   }
@@ -45,8 +45,8 @@ struct LCA {  // require 'graph'
   }
 
   l lca(l a, l b) {
+    if (depth[a] < depth[b]) swap(a, b);
     a = walk(a, depth[a] - depth[b]);
-    b = walk(b, depth[b] - depth[a]);
     if (a == b) return a;
     B(i, 0, up.size()) {
       if (up[i][a] != up[i][b]) {
@@ -54,6 +54,7 @@ struct LCA {  // require 'graph'
         b = up[i][b];
       }
     }
-    return up[0][a];
+    a = up[0][a];
+    return a;
   }
 };

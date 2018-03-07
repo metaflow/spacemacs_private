@@ -1,0 +1,16 @@
+#key: bfs
+#name: breadth first search on graph
+# --
+vb visited(${1:g}.v);
+queue<l> q;
+q.emplace(0);
+visited[0] = true;
+while (not q.empty()) {
+  l a = q.front(); q.pop();
+  for (auto e : $1.adj[a]) {
+    if (visited[e.to]) continue;
+    $0
+    visited[e.to] = true;
+    q.emplace(e.to);
+  }
+}

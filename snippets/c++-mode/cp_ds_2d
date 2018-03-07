@@ -30,7 +30,7 @@ struct point {
   double distance(const point& o) {
     return sqrt(*this >> o);
   }
-  bool equal_double(double x, double y) {
+  bool equal_double(double x, double y) const {
     if (abs(x - y) < EPS) return true;
     // Is x or y too close to zero?
     if (abs(x) < EPS || abs(y) < EPS) return false;

@@ -8,30 +8,28 @@ struct BiComponents {
   stack<Edge> edge_stack;
   vector<vector<Edge>> component; // 2-vertex-connected components
 
-  static BiComponents build(Graph& g) {
-    BiComponents bc;
-    bc.time = 0;
-    bc.age.resize(g.v_count);
-    bc.lowlink.resize(g.v_count);
-    bc.in_path.resize(g.v_count);
-    bc.cut_vertex.resize(g.v_count);
+  BiComponents(Graph& g) {
+    time = 0;
+    age.resize(g.v);
+    lowlink.resize(g.v);
+    in_path.resize(g.v);
+    cut_vertex.resize(g.v);
 
-    bc.explored_edge.resize(g.e_count);
-    bc.bridge.resize(g.e_count);
+    explored_edge.resize(g.e);
+    bridge.resize(g.e);
 
-    F(i, 0, g.v_count) {
-      if (bc.age[i] == 0) bc.dfs_components(i, g.e_count, g);
+    F(i, 0, g.v) {
+      if (age[i] == 0) dfs_components(i, g.e, g);
     }
-    return bc;
   }
 
   // edge #id ->a
   void dfs_components(l a, l edge_id, Graph& g) {
     time++;
     in_path[a] = true;
-    lowlink[a] = age[a] = time; 
+    lowlink[a] = age[a] = time;
     l forward_count = 0;
-    bool root = edge_id == g.e_count;
+    bool root = edge_id == g.e;
     for (auto e : g.adj[a]) {
       if (e.id == edge_id) continue;  // same edge
       if (not explored_edge[e.id]) {
