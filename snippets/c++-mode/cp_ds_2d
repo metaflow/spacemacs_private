@@ -30,16 +30,16 @@ struct point {
   double distance(const point& o) {
     return sqrt(*this >> o);
   }
-  bool equal_double(double x, double y) const {
-    if (abs(x - y) < EPS) return true;
+  bool equal($1 a, $1 b) const {
+    if (abs(a - b) < EPS) return true;
     // Is x or y too close to zero?
-    if (abs(x) < EPS || abs(y) < EPS) return false;
+    if (abs(a) < EPS || abs(b) < EPS) return false;
     // Check relative precision.
-    return (abs((x - y) / x) < EPS) && (abs((x - y) / y) < EPS);
+    return (abs((a - b) / a) < EPS) && (abs((a - b) / b) < EPS);
   }
   bool operator < (const point& o) const {
     if (o.x != x) return x < o.x;
-    if (not equal_double(o.x, x)) return x < o.x;
+    if (not equal(o.x, x)) return x < o.x;
     return y < o.y;
   }
 };
@@ -68,3 +68,4 @@ ostream& operator << (ostream& s, const point& p) {
   s << "(" << p.x << ", " << p.y << ")";
   return s;
 }
+using vp = vector<point>;

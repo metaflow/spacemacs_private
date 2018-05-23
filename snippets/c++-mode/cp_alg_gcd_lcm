@@ -2,8 +2,8 @@
 #name: GCD and LCM
 # --
 l gcd(l a, l b) {
-  while (b) { l t = b; b = a % b; a = t; }
+  while (b) { a %= b; swap(a, b); }
   return a;
 }
 
-l lcm(l a, l b) { return a * b / gcd(a, b); }
+l lcm(l a, l b) { return a / C(gcd(a, b)) * b; }

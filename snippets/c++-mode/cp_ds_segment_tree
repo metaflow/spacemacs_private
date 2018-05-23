@@ -4,7 +4,9 @@
 // [0, size), get / add intervals are inclusive
 class SegmentTree {
   l n;
-  vl v, low, high, delta;
+  // inclusive range [low[i], high[i]]
+  vl low, high;
+  vl v, delta;
 
   void init(l i, l a, l b) {
     low[i] = a;

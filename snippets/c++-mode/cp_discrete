@@ -1,5 +1,5 @@
 #key: discrete math
-#name: ceil, inverse mod, mod pow, mod mult, nCr combinations, euclid, sign
+#name: ceil, inverse mod, mod pow, mod mult, nCr combinations, euclid, sign, long mod
 # --
 l sign(l n) {
   if (n < 0) return -1;
@@ -77,4 +77,25 @@ vvl combinations(l n, l mod) {
   }
   return c;
 }
+
+// l on the ring of MOD, put l arg to the right: lm = lm + l
+struct lm {
+  l raw;
+  lm(): raw(0) {}
+  lm(l x): raw(x) {}
+  lm(lm const& x): raw(x.raw) {}
+  lm(lm&& x) { swap(*this, x); }
+  friend void swap(lm& a, lm& b) { swap(a.raw, b.raw); }
+  lm& operator = (l x) { raw = x; return *this; }
+  lm& operator = (lm x) { swap(*this, x); return *this; }
+  void operator += (const lm x) { raw = cong(raw + x.raw, MOD); }
+  lm operator + (const lm x) { lm z(*this); z += x; return z; }
+  void operator -= (const lm x) { raw = cong(raw - x.raw, MOD); }
+  lm operator - (const lm x) { lm z(*this); z -= x; return z; }
+  void operator *= (const lm x) { raw = cong(raw * x.raw, MOD); }
+  lm operator * (const lm x) { lm z(*this); z *= x; return z; }
+  void operator /= (const lm x) { raw = cong(raw * inverse_mod(x.raw, MOD), MOD); }
+  lm operator / (const lm x) { lm z(*this); z /= x; return z; }
+};
+using vlm = vector<lm>;
 

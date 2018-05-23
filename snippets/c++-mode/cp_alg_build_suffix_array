@@ -25,7 +25,7 @@ void sort_suffix_array(vl& sa, vl& rank, l k) {
   swap(sa, updated_sa);
 }
 
-vl build_suffix_array(string s) {
+vl build_suffix_array(string const& s) {
   l n = s.size();
   vl sa(n);
   vl rank(n);
