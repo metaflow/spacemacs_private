@@ -45,7 +45,8 @@ values."
      ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
      ;; <M-m f e R> (Emacs style) to install them.
      ;; ----------------------------------------------------------------
-     helm
+     (helm :variables
+           helm-use-frame-when-more-than-two-windows nil)
      (auto-completion)
      ;; better-defaults
      emacs-lisp
@@ -306,6 +307,7 @@ before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
   (defun open-problem (a b c)
     (select-frame-set-input-focus (selected-frame))
+    (raise-frame)
     (delete-other-windows)
     (let ((w-solution (first (window-list))))
       (find-file a)
@@ -340,18 +342,14 @@ you should place your code here."
   ;; (server-start))
   ;; (add-to-list 'default-frame-alist '(fullscreen . fullboth))
   (add-to-list 'default-frame-alist '(fullscreen . maximized))
-  (setq explicit-shell-file-name "c:\\Program Files\\Git\\bin\\bash.exe")
-  (setq explicit-bash.exe-args '("--noediting" "--login" "-i"))
-  (setq ispell-program-name "C:\\Program Files (x86)\\Aspell\\bin\\aspell.exe")
   (defun test-problem()
     (interactive)
     (defvar x)
-    (setq x (concat "\"C:\\Program Files\\Git\\bin\\bash.exe\" -c \""
-                    "~/etc/contests/test.sh '"
+    (setq x (concat "~/etc/contests/test.sh '"
                     (directory-file-name (file-name-directory buffer-file-name))
                     "' '"
                     (file-name-nondirectory (file-name-sans-extension buffer-file-name))
-                    "'\""))
+                    "'"))
     (with-output-to-temp-buffer "*test result*"
       (princ (current-time-string))
       (princ "\n")
@@ -389,29 +387,18 @@ you should place your code here."
  -Wno-unused-const-variable -Wno-sign-compare -Wno-unused-value\
  -pthread\
  -DLOCAL\
- -I\"C:\\users\\mgoncharov\\etc\\contests\\headers\" -g "
+ -I\"/home/mgoncharov/etc/contests/headers\" -g "
                                file
-                               " -lpthread -lpsapi"))))))
+                               " -lpthread"))))))
   (add-hook 'c++-mode-hook #'(lambda () (modify-syntax-entry ?_ "w")))
   (add-hook 'python-mode-hook #'(lambda () (modify-syntax-entry ?_ "w")))
   (push "\\*compilation\\*" spacemacs-useful-buffers-regexp)
   (push "\\*test result\\*" spacemacs-useful-buffers-regexp)
   (load-library "realgud")
-  (setq paradox-github-token "ce5b2268cb86ee36113d1b85435bcf1e03e5c408")
   (setq-default js2-basic-offset 2
                 js-indent-level 2)
-
-  (setq explicit-shell-file-name "C:\\Users\\mgoncharov\\bin\\cmder\\vendor\\git-for-windows\\bin\\bash.exe")
-  ;; (setq explicit-shell-file-name "C:\\Program\ Files\\Git\\bin\\bash.exe")
-  (setq shell-file-name "bash")
-  (setq explicit-bash.exe-args '("--login" "-i"))
-  (setenv "SHELL" shell-file-name)
   (add-hook 'comint-output-filter-functions 'comint-strip-ctrl-m)
-  (defun run-bash ()
-    (interactive)
-    (let ((shell-file-name "C:\\Program Files\\Git\\bin\\bash.exe"))
-      (shell "*bash*"))
-    )
+  (add-hook 'server-switch-hook #'raise-frame) ;
   ) ; user-config
 
 ;; Do not write anything past this comment. This is where Emacs will
