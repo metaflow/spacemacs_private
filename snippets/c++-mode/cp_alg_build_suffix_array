@@ -3,7 +3,7 @@
 # --
 void sort_suffix_array(vl& sa, vl& rank, l k) {
   l n = sa.size();
-  vl counts(max(n, (l)300));
+  vl counts(max(n + 1, (l)300));
   F(i, 0, n) {
     l p = 0;
     if (i + k < n) p = rank[i + k];
@@ -37,7 +37,7 @@ vl build_suffix_array(string const& s) {
     sort_suffix_array(sa, rank, k);
     sort_suffix_array(sa, rank, 0);
     vl updated_rank(rank.size());
-    l r = 0;
+    l r = 1;
     updated_rank[sa[0]] = r;
     F(i, 1, n) {
       if (rank[sa[i]] != rank[sa[i - 1]] ||

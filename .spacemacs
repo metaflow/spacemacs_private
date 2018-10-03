@@ -54,9 +54,9 @@ values."
      markdown
      ;; org
      (shell :variables
-             shell-default-height 30
-             shell-default-position 'bottom
-             shell-default-shell 'shell)
+            shell-default-height 30
+            shell-default-position 'bottom
+            shell-default-shell 'shell)
      ;; spell-checking
      ;; sml
      ;; syntax-checking
@@ -325,6 +325,7 @@ before packages are loaded. If you are unsure, you should try in setting them in
           (switch-to-buffer "*compilation*")
           (select-window w-solution)
           (search-forward "void solve")
+          (search-forward "void solve")
           )
         )
       )
@@ -345,11 +346,12 @@ you should place your code here."
   (defun test-problem()
     (interactive)
     (defvar x)
-    (setq x (concat "~/etc/contests/test.sh '"
-                    (directory-file-name (file-name-directory buffer-file-name))
-                    "' '"
-                    (file-name-nondirectory (file-name-sans-extension buffer-file-name))
-                    "'"))
+    (setq x (concat  (substitute-in-file-name "$HOME/etc/contests/test.sh")
+                     " '"
+                     (directory-file-name (file-name-directory buffer-file-name))
+                     "' '"
+                     (file-name-nondirectory (file-name-sans-extension buffer-file-name))
+                     "'"))
     (with-output-to-temp-buffer "*test result*"
       (princ (current-time-string))
       (princ "\n")
@@ -387,7 +389,9 @@ you should place your code here."
  -Wno-unused-const-variable -Wno-sign-compare -Wno-unused-value\
  -pthread\
  -DLOCAL\
- -I\"/home/mgoncharov/etc/contests/headers\" -g "
+ -I\""
+                               (substitute-in-file-name "$HOME/etc/contests/headers")
+                               "\" -g "
                                file
                                " -lpthread"))))))
   (add-hook 'c++-mode-hook #'(lambda () (modify-syntax-entry ?_ "w")))
@@ -411,7 +415,7 @@ you should place your code here."
  '(evil-want-Y-yank-to-eol nil)
  '(package-selected-packages
    (quote
-    (xterm-color shell-pop multi-term eshell-z eshell-prompt-extras esh-help clojure-snippets clj-refactor inflections edn paredit peg cider-eval-sexp-fu cider seq queue clojure-mode nginx-mode yaml-mode realgud-pry realgud-byebug realgud test-simple loc-changes load-relative web-beautify livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc company-tern dash-functional tern coffee-mode web-mode tagedit slim-mode scss-mode sass-mode pug-mode less-css-mode helm-css-scss haml-mode emmet-mode company-web web-completion-data csv-mode ein websocket rvm ruby-tools ruby-test-mode rubocop rspec-mode robe rbenv rake minitest chruby bundler inf-ruby ahk-mode git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter diff-hl yapfify pyvenv pytest pyenv-mode py-isort pip-requirements live-py-mode hy-mode helm-pydoc cython-mode company-anaconda anaconda-mode pythonic smeargle orgit org mmm-mode markdown-toc markdown-mode magit-gitflow helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md evil-magit magit magit-popup git-commit with-editor disaster company-c-headers cmake-mode clang-format helm-company helm-c-yasnippet company-statistics company auto-yasnippet yasnippet ac-ispell auto-complete ob-sml sml-mode flyspell-correct-helm flyspell-correct auto-dictionary ws-butler window-numbering which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint info+ indent-guide ido-vertical-mode hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make projectile pkg-info epl helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu highlight elisp-slime-nav dumb-jump f s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed dash aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async quelpa package-build spacemacs-theme)))
+    (winum fuzzy ghub sesman xterm-color shell-pop multi-term eshell-z eshell-prompt-extras esh-help clojure-snippets clj-refactor inflections edn paredit peg cider-eval-sexp-fu cider seq queue clojure-mode nginx-mode yaml-mode realgud-pry realgud-byebug realgud test-simple loc-changes load-relative web-beautify livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc company-tern dash-functional tern coffee-mode web-mode tagedit slim-mode scss-mode sass-mode pug-mode less-css-mode helm-css-scss haml-mode emmet-mode company-web web-completion-data csv-mode ein websocket rvm ruby-tools ruby-test-mode rubocop rspec-mode robe rbenv rake minitest chruby bundler inf-ruby ahk-mode git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter diff-hl yapfify pyvenv pytest pyenv-mode py-isort pip-requirements live-py-mode hy-mode helm-pydoc cython-mode company-anaconda anaconda-mode pythonic smeargle orgit org mmm-mode markdown-toc markdown-mode magit-gitflow helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md evil-magit magit magit-popup git-commit with-editor disaster company-c-headers cmake-mode clang-format helm-company helm-c-yasnippet company-statistics company auto-yasnippet yasnippet ac-ispell auto-complete ob-sml sml-mode flyspell-correct-helm flyspell-correct auto-dictionary ws-butler window-numbering which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint info+ indent-guide ido-vertical-mode hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make projectile pkg-info epl helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu highlight elisp-slime-nav dumb-jump f s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed dash aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async quelpa package-build spacemacs-theme)))
  '(standard-indent 2))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

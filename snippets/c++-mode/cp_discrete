@@ -1,6 +1,13 @@
 #key: discrete math
-#name: ceil, inverse mod, mod pow, mod mult, nCr combinations, euclid, sign, long mod
+#name: ceil, inverse mod, mod pow, mod mult, nCr combinations, euclid, sign, long mod, gcd, lcm
 # --
+l gcd(l a, l b) {
+while (b) { a %= b; swap(a, b); }
+return a;
+}
+
+l lcm(l a, l b) { return a / (gcd(a, b)) * b; }
+
 l sign(l n) {
   if (n < 0) return -1;
   if (n == 0) return 0;
@@ -78,7 +85,7 @@ vvl combinations(l n, l mod) {
   return c;
 }
 
-// l on the ring of MOD, put l arg to the right: lm = lm + l
+// l on the ring of MOD
 struct lm {
   l raw;
   lm(): raw(0) {}
@@ -95,7 +102,28 @@ struct lm {
   void operator *= (const lm x) { raw = cong(raw * x.raw, MOD); }
   lm operator * (const lm x) { lm z(*this); z *= x; return z; }
   void operator /= (const lm x) { raw = cong(raw * inverse_mod(x.raw, MOD), MOD); }
+  void operator ++ () { raw = cong(raw + 1, MOD); }
+  void operator -- () { raw = cong(raw - 1, MOD); }
   lm operator / (const lm x) { lm z(*this); z /= x; return z; }
+  lm pow(l exp) const {
+    lm r(1);
+    lm base(*this);bool is_prime(l n, vl const& primes) {
+    auto p = primes.begin();
+    while (p != primes.end() and ((*p) * (*p)) <= n) {
+    if (n % *p == 0) return n == *p;
+    p++;
+    }
+    return true;
+}
+    while (exp) {
+          if (exp % 2) r *= base;
+          base * = base;
+          exp /= 2;
+    }
+    return r;
+  }
 };
 using vlm = vector<lm>;
-
+ostream& operator << (ostream& s, const lm& p) {
+  return s << p.raw;
+}
