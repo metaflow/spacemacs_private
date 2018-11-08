@@ -342,7 +342,13 @@ you should place your code here."
   ;; (unless (server-running-p)
   ;; (server-start))
   ;; (add-to-list 'default-frame-alist '(fullscreen . fullboth))
-  (add-to-list 'default-frame-alist '(fullscreen . maximized))
+  (add-to-list 'default-frame-alist '(fullscreen . maximized)) ;; maximized on start
+  (global-company-mode)
+  (setq helm-mini-default-sources '(helm-source-buffers-list
+                                    helm-source-buffer-not-found))
+  (setq backup-by-copying t
+        make-backup-files nil
+        create-lockfiles nil)
   (defun test-problem()
     (interactive)
     (defvar x)
