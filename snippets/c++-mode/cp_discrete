@@ -107,14 +107,7 @@ struct lm {
   lm operator / (const lm x) { lm z(*this); z /= x; return z; }
   lm pow(l exp) const {
     lm r(1);
-    lm base(*this);bool is_prime(l n, vl const& primes) {
-    auto p = primes.begin();
-    while (p != primes.end() and ((*p) * (*p)) <= n) {
-    if (n % *p == 0) return n == *p;
-    p++;
-    }
-    return true;
-}
+    lm base(*this);
     while (exp) {
           if (exp % 2) r *= base;
           base * = base;

@@ -311,7 +311,7 @@ before packages are loaded. If you are unsure, you should try in setting them in
     (delete-other-windows)
     (let ((w-solution (first (window-list))))
       (find-file a)
-      (let ((w-in (split-window-right)))
+      (let ((w-in (split-window-right 83)))
         (select-window w-in)
         (find-file b)
         (let ((w-compilation (split-window-below))
@@ -380,7 +380,8 @@ you should place your code here."
 
   ;; key bindings
   (spacemacs/set-leader-keys-for-major-mode 'c++-mode
-    "t"  'test-problem)
+    "t"  'test-problem
+    "f"  'clang-format-buffer)
   (define-key evil-insert-state-map "\C-e" 'end-of-line)
   (define-key evil-insert-state-map "\C-a" 'beginning-of-line)
   (add-hook 'c++-mode-hook
