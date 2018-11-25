@@ -389,7 +389,7 @@ you should place your code here."
               (unless (file-exists-p "Makefile")
                 (set (make-local-variable 'compile-command)
                      (let ((file (file-name-nondirectory buffer-file-name)))
-                       (concat "g++ -std=c++14 -o "
+                       (concat "clang++ -std=c++14 -o "
                                (file-name-sans-extension file)
                                "\
  -O2 -Wall -Wextra -Wshadow\
