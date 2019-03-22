@@ -1,0 +1,6 @@
+# -*- coding: UT-8 -*-
+# name: time
+# key: time
+# --
+`(format-time-string "%R")`
+$0
