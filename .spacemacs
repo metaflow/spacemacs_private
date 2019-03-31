@@ -393,6 +393,8 @@ you should place your code here."
               (unless (file-exists-p "Makefile")
                 (set (make-local-variable 'compile-command)
                      (let ((file (file-name-nondirectory buffer-file-name)))
+
+                       ;; -fsanitize=address -fsanitize=undefined\
                        (concat "clang++ -std=c++14 -o "
                                (file-name-sans-extension file)
                                "\

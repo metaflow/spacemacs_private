@@ -110,13 +110,15 @@ struct lm {
     lm base(*this);
     while (exp) {
           if (exp % 2) r *= base;
-          base * = base;
+          base *= base;
           exp /= 2;
     }
     return r;
   }
 };
 using vlm = vector<lm>;
+using vvlm = vector<vlm>;
+using vvvlm = vector<vvlm>;
 ostream& operator << (ostream& s, const lm& p) {
   return s << p.raw;
 }
